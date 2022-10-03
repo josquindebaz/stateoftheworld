@@ -184,34 +184,6 @@ if spe == 0 or "NOBEL_PAIX" in spe:
     except :
         print(u"Je n'ai pas pu récupérer le Nobel de la Paix")
 
-if spe == 0 or "BoxOffice" in spe:
-    if verbose: 
-        print(u"Je récupère le boxoffice")
-    try :
-        URL = "http://www.cine-directors.net/boxoff.htm"
-        page = urllib.urlopen(URL).read()
-        soup = BeautifulSoup(page, "lxml")
-        tables = soup.find_all('table')
-        lines = tables[3].find_all('tr')
-        cols = lines[2].find_all('td')
-        title = cols[1].find_all('font')
-        if title == []:
-            coupe = cols[1].text.strip()
-        else:
-            coupe = title[0].text
-
-        coupe = re.sub("<.*>", "", coupe)
-        coupe = re.sub("\s{2,}"," ", coupe)
-        coupe = re.sub("<[\S]*$", "", coupe)
-        if coupe != "" :
-            #maj("BoxOffice" , coupe )
-            if verbose: 
-                print([coupe])
-        else:
-            print("pb Boxoffice vide")
-    except:
-        print("Je n'ai pas pu récupérer le BoxOffice")
-
 if spe == 0 or "LAST_CRASH" in spe:
     if verbose:
         print("Je récupère le dernier crash")
