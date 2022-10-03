@@ -13,8 +13,6 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import requests
 requests.packages.urllib3.disable_warnings()
-import ssl
-ssl._create_default_https_context = ssl._create_unverified_context
 
 from credentials import atmoKey 
 from credentials import openWeatherKey
@@ -316,22 +314,6 @@ if spe == 0 or "CAC40" in spe:
         #maj("CAC40", CAC40)
     except:
         print("je n'ai pas pu recuperer le CAC 40")
-
-if spe == 0 or "MPAUVRES" in spe:
-    if verbose:
-        print("milliers sous le seuil pauvrete")
-
-    try:
-        url = "http://www.insee.fr/fr/statistiques/2408345"
-        req = urllib2.urlopen(url)
-        soup = BeautifulSoup(req, 'html.parser')   
-        res = soup.find("table").find_all("tr")[3].find_all("td")[-1].string
-        MPAUVRES = re.sub("[^\d]", "", res)
-        if verbose:
-            print(MPAUVRES)
-        #maj("MPAUVRES", MPAUVRES)
-    except :
-        print("je n'ai pas pu recuperer le MPAUVRES")
 
 
 if spe == 0 or "SERIE" in spe:
