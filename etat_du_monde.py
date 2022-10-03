@@ -7,7 +7,6 @@ import datetime
 import zipfile
 import string
 import sys
-from bs4 import BeautifulSoup
 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -29,17 +28,6 @@ else:
     spe = sys.argv[1:]
     verbose = 1
 
-
-
-def get_last_crash(verbose):
-    URL ="http://www.planecrashinfo.com/database.htm"
-    page = urllib.urlopen(URL).read()
-    l1 = re.findall('<a href="(.*)"><strong>\d{4}<', page)[-1]
-    URL2 = "http://www.planecrashinfo.com%s" % (l1)
-    page = urllib.urlopen(URL2).read()
-    l2 = re.findall('<A.*"(.*\.htm)"', page)[-1]
-    l1_1 = re.split("/", l1)
-    return 'http://www.planecrashinfo.com/%s/%s' % (l1_1[1], l2)
 
 """
     begin
@@ -181,15 +169,6 @@ if spe == 0 or "NOBEL_PAIX" in spe:
             print(ressource)
     except :
         print(u"Je n'ai pas pu récupérer le Nobel de la Paix")
-
-if spe == 0 or "LAST_CRASH" in spe:
-    if verbose:
-        print("Je récupère le dernier crash")
-    try : 
-        value = get_last_crash(verbose)
-        #maj("LAST_CRASH", value)
-    except:
-        print("Je n'ai pas pu récupérer le Crash")
 
 
 if spe == 0 or "GSL" in spe or "SP98" in spe:
