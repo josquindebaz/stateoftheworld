@@ -17,7 +17,7 @@ def get():
 
     url = "https://www.insee.fr/fr/statistiques/2408345"
 
-    with  urlopen(url) as request:
+    with urlopen(url) as request:
         soup = BeautifulSoup(request, "lxml")
     raw_value = soup.find("table").find_all("tr")[3].find_all("td")[-1].string
     cleaned_value = re.sub(r"\D", "", raw_value)

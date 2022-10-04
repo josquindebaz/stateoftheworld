@@ -13,7 +13,7 @@ def get():
     """ Get the CO2 world level """
 
     url = "https://www.esrl.noaa.gov/gmd/ccgg/trends/monthly.html"
-    with  urlopen(url) as request:
+    with urlopen(url) as request:
         soup = BeautifulSoup(request, "lxml")
     raw_value = soup.find("table").find_all("td")[1].string
     cleaned_value = re.findall(r"([\d\.]*) ppm", raw_value)[0]

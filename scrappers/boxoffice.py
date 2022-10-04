@@ -13,7 +13,7 @@ def get():
     """ Get the box-office star movie """
 
     url = "http://www.cine-directors.net/boxoff.htm"
-    with  urlopen(url) as request:
+    with urlopen(url) as request:
         soup = BeautifulSoup(request, "lxml")
     raw_value = soup.find_all("table")[3].find_all("tr")[2].find_all("td")[1].contents[1].string
     cleaned_value = re.sub(r"\s{2,}", " ", raw_value.strip())
