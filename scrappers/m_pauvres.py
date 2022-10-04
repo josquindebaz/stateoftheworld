@@ -15,12 +15,12 @@ ssl._create_default_https_context = ssl._create_unverified_context  # pylint: di
 def get():
     """ Get the number of poor people """
 
-    url = "http://www.insee.fr/fr/statistiques/2408345"
+    url = "https://www.insee.fr/fr/statistiques/2408345"
 
     with  urlopen(url) as request:
         soup = BeautifulSoup(request, "lxml")
     raw_value = soup.find("table").find_all("tr")[3].find_all("td")[-1].string
-    cleaned_value = re.sub(r"[^\d]", "", raw_value)
+    cleaned_value = re.sub(r"\D", "", raw_value)
 
     return cleaned_value
 
