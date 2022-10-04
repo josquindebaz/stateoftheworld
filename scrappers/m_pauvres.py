@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Scrap INSEE to get under pauverty line capita
+Scrap INSEE to get under poverty line population
 """
 
 import re
 from urllib.request import urlopen
 import ssl
 from bs4 import BeautifulSoup
-ssl._create_default_https_context = ssl._create_unverified_context # pylint: disable=protected-access
+
+ssl._create_default_https_context = ssl._create_unverified_context  # pylint: disable=protected-access
+
 
 def get():
     """ Get the number of poor people """
@@ -21,6 +23,7 @@ def get():
     cleaned_value = re.sub(r"[^\d]", "", raw_value)
 
     return cleaned_value
+
 
 if __name__ == "__main__":
     print("Let's get poverty level")

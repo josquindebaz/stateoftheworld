@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Scrap NOAA website to retreive CO2 world level
+Scrap NOAA website to retrieve CO2 world level
 """
 
 import re
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+
 
 def get():
     """ Get the CO2 world level """
@@ -18,6 +19,7 @@ def get():
     cleaned_value = re.findall(r"([\d\.]*) ppm", raw_value)[0]
 
     return cleaned_value
+
 
 if __name__ == "__main__":
     print("Let's get CO2 level")
