@@ -179,19 +179,6 @@ if spe == 0 or "GSL" in spe or "SP98" in spe:
     except :
         print("Je n'ai pas pu recuperer le prix de l'essence")
 
-if spe == 0 or "EBOLADEAD" in spe:
-    #morts ebola
-    try : 
-        p = urllib.urlopen("http://healthmap.org/ebola").read()
-        q = re.split('<h4 class="date">',p)
-        r = re.findall('<span class="deaths">(\d*) deaths</span>',q[-1])
-        t = 0
-        for s in r:
-            t += int(s)
-        #maj("EBOLADEAD",str(t))
-    except:
-        print("je n'ai pas pu recuperer le nombre de morts dus a Ebola")
-
 if spe == 0 or "CONCERTATION" in spe or "SOCIOARGU" in spe:
     if verbose : print("Recuperons les visiteurs de socioargu et de concertation")
     try: 
