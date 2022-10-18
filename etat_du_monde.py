@@ -137,23 +137,7 @@ for item in liste_type_2:
 
 
 
-if spe == 0 or "NOBEL_PAIX" in spe:
-    if verbose: print(u"Je récupère le dernier prix Nobel de la Paix")
-    try :
-        url = "https://fr.wikipedia.org/wiki/Prix_Nobel_de_la_paix"
-        page = urllib.urlopen(url).read()
-        sp = re.split('class="mw-headline"', page)
-        reg = re.compile(r' id="Liste"')
-        sp = filter(reg.match, sp)
-        tds = re.split("<td>", sp[0])[-3]
-        """TODO recuperer qd double"""
-        ressource = re.search('">(.*)</a', tds).group(1)
-        ressource  = re.sub(".*>", "", ressource)
-        #maj("NOBEL_PAIX" , ressource)
-        if verbose: 
-            print(ressource)
-    except :
-        print(u"Je n'ai pas pu récupérer le Nobel de la Paix")
+
 
 
 if spe == 0 or "GSL" in spe or "SP98" in spe:
