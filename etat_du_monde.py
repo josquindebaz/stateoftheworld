@@ -135,22 +135,7 @@ for item in liste_type_2:
         except : 
             print( u"je n'ai pas pu recuperer %s" % (item[0]))
 
-if spe == 0 or "LAST_GONCOURT" in spe:
-    if verbose: 
-        print(u"Je récupère le Goncourt")
-    try :
-        url = "https://fr.wikipedia.org/wiki/Prix_Goncourt"
-        page = urllib.urlopen(url).read()
-        sp = re.split('class="mw-headline"', page)
-        reg = re.compile(r' id="Liste_des_laur..ats_du_prix_Goncourt"')
-        sp = filter(reg.match, sp)
-        tds = re.split("<td>", sp[0])[-4:-2]
-        ressource = map(lambda x: re.search('">(.*)</a', x).group(1), tds)
-        #maj("LAST_GONCOURT" , ", ".join(ressource) )
-        if verbose: 
-            print(ressource)
-    except :
-        print(u"Je n'ai pas pu récupérer le goncourt")
+
 
 if spe == 0 or "NOBEL_PAIX" in spe:
     if verbose: print(u"Je récupère le dernier prix Nobel de la Paix")
