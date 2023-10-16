@@ -38,20 +38,20 @@ if verbose:
 
 today = datetime.date.today()
 
-def code_html(texte):
-    texte = re.sub("&uuml;", "ü", texte)
-    texte = re.sub("&eacute;", "é", texte)
-    texte = re.sub("&ouml;", "ö", texte)
-    texte = re.sub("&auml;", "ä", texte)
-    texte = re.sub("&ccedil;", "ç", texte)
-    texte = re.sub("&egrave;", "è", texte)
-    texte = re.sub("(\d) (\d)", "\\1\\2", texte)
-    return texte+ "\n"
+def code_html(text):
+    text = re.sub("&uuml;", "ü", text)
+    text = re.sub("&eacute;", "é", text)
+    text = re.sub("&ouml;", "ö", text)
+    text = re.sub("&auml;", "ä", text)
+    text = re.sub("&ccedil;", "ç", text)
+    text = re.sub("&egrave;", "è", text)
+    text = re.sub("(\d) (\d)", "\\1\\2", text)
+    return text+ "\n"
 
 """
-description, indicateur, url, motif split garde après , motif à chercher avec () pour ce qui est à récupérer
+description, indicator, url, motif split garde après , motif à chercher avec () pour ce qui est à récupérer
 """
-liste_type_1 = [ 
+list_type_1 = [
     [u"la température à Paris", 
         "TEMP_PARIS", 
         "http://api.openweathermap.org/data/2.5/weather?id=2988507&appid=%s&units=metric"%openWeatherKey,
@@ -79,27 +79,27 @@ liste_type_1 = [
         '<td width="110" class="white" data-sort-value=(\d*)>'],
 ]
 
-for item in liste_type_1:
+for item in list_type_1:
     if spe == 0 or item[1] in spe:
+        aim = item[0]
         if verbose:
-            print("Recuperons %s " % item[0])
+            print(aim)
         try:
             page = urllib.urlopen(item[2]).read()
             if item[3] == "":
-                indicateur = re.search(item[4], page).group(1)
+                indicator = re.search(item[4], page).group(1)
             else:
-                partie = re.split(item[3], page)[1]
-                indicateur = re.search(item[4], partie, re.MULTILINE).group(1)     
-            #maj(item[1], indicateur)
+                part = re.split(item[3], page)[1]
+                indicator = re.search(item[4], part, re.MULTILINE).group(1)
             if verbose: 
-                print(item[1], indicateur)
+                print(item[1], indicator)
         except: 
-            print("je n'ai pas pu recuperer %s" % (item[0]))
+            print("Failed to retrieve %s" % aim)
 
 """
-description, indicateur, url, motif a chercher avec () pour ce qui est a recuperer, no d'occurence a garder,casse
+description, indicator, url, motif a chercher avec () pour ce qui est a recuperer, no d'occurence a garder,casse
 """
-liste_type_2 = [ 
+list_type_2 = [
     ["le taux de change du dollar",
         "DOLLAR",
         'https://www.boursorama.com/bourse/devises/taux-de-change-euro-dollar-EUR-USD/',
@@ -111,38 +111,35 @@ liste_type_2 = [
     ["le nombre de soldats occidentaux tues en Afghanistan","AFGHAN_DEATH_TOLL","http://icasualties.org/App/AfghanFatalities","<p> Afghanistan Fatalities Total: (\d*) </p>", 0, 0],
     ]
 
-for item in liste_type_2:
+for item in list_type_2:
     if spe == 0 or item[1] in spe:
+        aim = item[0]
         if verbose:
-            print("Recuperons %s " % item[0])
+            print(aim)
         try:
             page = urllib.urlopen(item[2]).read()
             if verbose:
-                print("telec ok")
-            indicateur = re.findall(item[3],page)
+                print("download ok")
+            indicator = re.findall(item[3],page)
             if verbose:
-                print(indicateur)
-            indicateur = indicateur[item[4]]
+                print(indicator)
+            indicator = indicator[item[4]]
             if verbose:
-                print(indicateur)
+                print(indicator)
             if item[5] == "cap":
                 try :
-                    indicateur = string.capwords(indicateur)
+                    indicator = string.capwords(indicator)
                 except :
                     pass
-                if verbose: print(indicateur)
-            #maj(item[1],indicateur)
-        except : 
-            print( u"je n'ai pas pu recuperer %s" % (item[0]))
-
-
-
-
-
+                if verbose: 
+                    print(indicator)
+        except :
+            print("Failed to retrieve %s" % aim)
 
 if spe == 0 or "GSL" in spe or "SP98" in spe:
+    aim = "gas prices"
     if verbose:
-        print("Je recupere le prix de l'essence")
+        print(aim)
     try :
         url = "http://donnees.roulez-eco.fr/opendata/jour"
         if verbose: 
@@ -172,15 +169,16 @@ if spe == 0 or "GSL" in spe or "SP98" in spe:
                 if testSP.search(paris[c]):
                     SP = testSP.search(paris[c]).group(1)
                     SP = str(float(SP) /1000)
-                    #maj("SP98" , SP )
             c += 1
         if verbose:
             print(GSL, SP)
     except :
-        print("Je n'ai pas pu recuperer le prix de l'essence")
+        print("Failed to retrieve %s" % aim)
 
 if spe == 0 or "CONCERTATION" in spe or "SOCIOARGU" in spe:
-    if verbose : print("Recuperons les visiteurs de socioargu et de concertation")
+    aim = "socioargu and concertation visitors"
+    if verbose :
+        print(aim)
     try: 
         headers = { 'User-Agent': 'Python urllib2' }
         req = urllib2.Request("https://logs.openedition.org", None, headers)
@@ -193,14 +191,15 @@ if spe == 0 or "CONCERTATION" in spe or "SOCIOARGU" in spe:
         l = ["socioargu", "concertation"]
         for bl in l:
             val = re.findall(".*%s.*</a><td>([\d ]*)<td>"%bl, pageb)
-            #maj(bl.upper(), val[0])
-            if verbose: 
+            if verbose:
                 print(bl.upper(), val[0])
     except:
-        print ("je n'ai pas pu recuperer les visiteurs de socioargu et de concertation")
+        print("Failed to retrieve %s" % aim)
 
 if spe == 0 or "POPU_MONDE" in spe:
-    if verbose: print("Recuperons la population mondiale")
+    aim = "world population"
+    if verbose:
+        print(aim)
     try :
         url = "http://www.populationmondiale.com"
         req = urllib2.Request(url, None, {'User-Agent': 'Mozilla/5.0'})
@@ -209,65 +208,65 @@ if spe == 0 or "POPU_MONDE" in spe:
                 re.search(r"([\d ]*) personnes", page).group(0))
         if verbose: 
             print(value)
-        #maj("POPU_MONDE", value)
     except :
-        print("je n'ai pas pu recuperer la population mondiale")
-	
+        print("Failed to retrieve %s" % aim)
+
 
 if spe == 0 or "BAG_KG" in spe:
+    aim = "baguette price"
     if verbose:
-        print("Recuperons le prix de la baguette")
+        print(aim)
     try :
         r = requests.get("https://bdm.insee.fr/series/sdmx/data/SERIES_BDM/000442423?lastNObservations=1")
         BAG_KG = re.findall('OBS_VALUE="([\d\.]*)"', r.text)[0]
         if verbose:
             print(BAG_KG)
-        #maj("BAG_KG", BAG_KG)
     except :
-        print("je n'ai pas pu recuperer le prix de la baguette")
+        print("Failed to retrieve %s" % aim)
 
 if spe == 0 or "POPU_FRA" in spe:
+    aim = "French population"
     if verbose: 
-        print("Recuperons la pop francaise")
+        print(aim)
     try:
         r = requests.get("https://bdm.insee.fr/series/sdmx/data/SERIES_BDM/001641586?lastNObservations=1")
         POPU_FRA = re.findall('OBS_VALUE="([\d\.]*)"', r.text)[0]
         if verbose: 
             print(POPU_FRA)
-        #maj("POPU_FRA", POPU_FRA)
     except :
-        print ("je n'ai pas pu recuperer la pop francaise")
+        print("Failed to retrieve %s" % aim)
 
 if spe == 0 or "CAC40" in spe:
+    aim = "CAC 40"
     if verbose: 
-        print("Recuperons le CAC 40")
+        print(aim)
     try:
         page = urllib.urlopen("https://investir.lesechos.fr/cours/historique-indice-cac-40,xpar,px1,fr0003500008,isin.html").read()
         CAC40 = re.findall('<meta instrumentprop="price" content="(.*)"', page)[0]
         if verbose: 
             print(CAC40)
-        #maj("CAC40", CAC40)
     except:
-        print("je n'ai pas pu recuperer le CAC 40")
+        print("Failed to retrieve %s" % aim)
 
 
 if spe == 0 or "SERIE" in spe:
+    aim = "popular series"
     if verbose:
-        print("la serie en vogue")
+        print(aim)
     try:
         page = urllib.urlopen("http://www.allocine.fr/series/meilleures/decennie-2010/annee-2019/").read()
         data_serie = re.findall('thumbnail-link" title="(.*)"', page)
         SERIE = data_serie[0]
         if verbose:
             print(SERIE)
-        #maj("SERIE", SERIE)
     except :
-        print("je n'ai pas pu recuperer la serie en vogue")
+        print("Failed to retrieve %s" % aim)
 
 
 if spe == 0 or "ATMO" in spe:
+    aim = "AirParif ATMO indicator"
     if verbose:
-        print("l'indice ATMO de AirParif")
+        print(aim)
     try:
         url = 'https://api.airparif.asso.fr/indices/prevision/commune?insee=75104'
         headers = {"Accept": "application/json",
@@ -275,15 +274,15 @@ if spe == 0 or "ATMO" in spe:
         req = requests.get(url, headers=headers, verify=False)
         res = req.json()
         val = res['75104'][1]["indice"]
-        #maj("ATMO", val)
         if verbose:
             print([req, res, val]) 
     except :
-        print ("je n'ai pas pu recuperer ATMO")
+        print("Failed to retrieve %s" % aim)
 
 if spe == 0 or "COVID" in spe:
+    aim = "COVID casualties"
     if verbose:
-        print("les morts de la COVID")
+        print(aim)
     try:
         url = "https://www.worldometers.info/coronavirus/index.php"
         req = urllib2.Request(url, None, { 'User-Agent' : 'Mozilla/5.0' })
@@ -295,9 +294,7 @@ if spe == 0 or "COVID" in spe:
         
         if verbose:
             print(world, france)
-        #maj("MORTSCOVIDMOND", world)
-        #maj("MORTSCOVIDFRANCE", france)
     except :
-        print("je n'ai pas pu recuperer les donnees du COVID")
+        print("Failed to retrieve %s" % aim)
 
 
